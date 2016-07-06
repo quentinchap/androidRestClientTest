@@ -22,6 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.test.quentin.resttest.dummy.DummyContent;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -31,7 +33,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final LinearLayout line = (LinearLayout) findViewById(R.id.testFrag);
+        final ItemFragment frag = (ItemFragment) getSupportFragmentManager().findFragmentById(R.id.list);
 
         GithubService service = new Retrofit.Builder()
                 .baseUrl(GithubService.ENDPOINT)
@@ -52,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Repo>> call, Response<List<Repo>> response) {
 
                 Log.d("Return of api",response.toString());
+                frag.updateList(response.body());
 
-                for (Repo rep: response.body())
+                /*for (Repo rep: response.body())
                 {
                     TextView text = new TextView(getApplicationContext());
                     text.setText(rep.getName());
@@ -61,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
                     line.addView(text);
 
-                }
+                }*/
             }
 
             @Override
@@ -76,4 +80,8 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this,"nombre de dépots : "+repos.size(),Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
+    }
 }
